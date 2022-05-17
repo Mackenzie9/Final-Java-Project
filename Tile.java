@@ -13,22 +13,27 @@ public class Tile {
 	    if (t == 0) {
 	      this.canCollide = false;
 	      this.canInteract = false; 
-	      
+	      fileName = "Smile.java";
 	    } else if (this.type == 1) {
 	      this.canCollide = true;
 	      this.canInteract = false;
+	      fileName = "Smile.java";
 	    } else if (this.type == 2) {
 	      this.canCollide = true;
 	      this.canInteract = false;
+	      fileName = "Smile.java";
 	    } else if (this.type == 3) {
 	      this.canCollide = true;
 	      this.canInteract = true;
+	      fileName = "Smile.java";
 	    } else if (this.type == 4) {
 	      this.canCollide = true;
 	      this.canInteract = false;
+	      fileName = "Smile.java";
 	    } else {
 	      this.canCollide = false;
 	      this.canInteract = false;
+	      fileName = "Smile.java";
 	    }
 	    try {
 	    	  img = ImageIO.read(new File(fileName));
