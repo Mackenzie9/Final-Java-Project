@@ -18,7 +18,7 @@ public class Panel extends JPanel implements ActionListener {
     this.setPreferredSize(new Dimension(w, h));
     this.setFocusable(true);
     this.setBackground(Color.white);
-    this.c = new Character();
+    this.c = new Character(w, h);
     timer = new Timer(DELAY, this);
     timer.start();
 
