@@ -1,30 +1,30 @@
 package game;
 
 public class Tile {
-	private boolean isAvailable;
-	  private boolean caninteract;
+	  private boolean collidable;
+	  private boolean canInteract;
 	  private static int SIZE; 
 
 	  public Tile(){
-	    isAvailable = true;
-	    caninteract = true;
+	    collidable = true;
+	    canInteract = true;
 	    SIZE = 40; // Same for all tiles.
 	  }
 
-	  public int getSize(){
+	  public static int getSize(){
 	    return SIZE; 
 	  }
 	  public boolean getAvailability(){
-	    return isAvailable;
+	    return collidable;
 	  }
 
 	  public void setAvailability(boolean a){
-	    isAvailable = a;
+	    collidable = a;
 	  }
-	  public boolean getinteraction(){
-	    return caninteract;
+	  public boolean getInteraction(){
+	    return canInteract;
 	  }
 	  public void setInteraction(boolean a){
-	    caninteract = a;
+	    canInteract = a;
 	  }
 }
