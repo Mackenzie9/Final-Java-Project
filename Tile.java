@@ -1,30 +1,82 @@
 package game;
 
 public class Tile {
-	  private boolean collidable;
-	  private boolean canInteract;
-	  private static int SIZE; 
+  private boolean canCollide;
+  private boolean canInteract;
+  public static final int SIZE = 40; 
+  private int type;
+  //floor = 0, wall = 1, water = 2, door = 3, switch = 4
 
-	  public Tile(){
-	    collidable = true;
-	    canInteract = true;
-	    SIZE = 40; // Same for all tiles.
-	  }
+  public Tile(int t) {
+    if (t == 0) {
+      this.canCollide = false;
+      this.canInteract = false; 
+    } else if (this.type == 1) {
+      this.canCollide = true;
+      this.canInteract = false;
+    } else if (this.type == 2) {
+      this.canCollide = true;
+      this.canInteract = false;
+    } else if (this.type == 3) {
+      this.canCollide = true;
+      this.canInteract = true;
+    } else if (this.type == 4) {
+      this.canCollide = true;
+      this.canInteract = false;
+    } else {
+      this.canCollide = false;
+      this.canInteract = false;
+    }
+    this.type = t; 
+    //floor = 0, wall = 1, water = 2, door = 3, switch = 4
+    //SIZE = 40; // Same for all tiles.
+  }
+  public Image getImge() {
+    String fileName;
+    if (this.type == 0) {
+      fileName = "Smile.java";
+    } else if (this.type == 1) {
+      fileName = "Smile.java";
+    } else if (this.type == 2) {
+      fileName = "Smile.java";
+    } else if (this.type == 3) {
+      fileName = "Smile.java";
+    } else if (this.type == 4) {
+      fileName = "Smile.java";
+    } else {
+      fileName = "Smile.java";
+    }
+    try {
+  	  img = ImageIO.read(new File(fileName));
+    } catch (IOException e) {
+    	e.printStackTrace();
+    }
+    return image;
+  }
+  
+  public int getSize(){
+    return SIZE; 
+  }
+  public boolean getCollision(){
+    return canCollide;
+  }
 
-	  public static int getSize(){
-	    return SIZE; 
-	  }
-	  public boolean getAvailability(){
-	    return collidable;
-	  }
+  public void setType(int t) {
+    this.type = t;
+  }
 
-	  public void setAvailability(boolean a){
-	    collidable = a;
-	  }
-	  public boolean getInteraction(){
-	    return canInteract;
-	  }
-	  public void setInteraction(boolean a){
-	    canInteract = a;
-	  }
+  public int getType() {
+    return type;
+  }
+
+  public void setCollision(boolean a){
+    this.canCollide = a;
+  }
+  
+  public boolean getinteraction(){
+    return canInteract;
+  }
+  public void setInteraction(boolean a){
+    this.canInteract = a;
+  }
 }
