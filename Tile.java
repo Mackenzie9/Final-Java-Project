@@ -1,5 +1,9 @@
 package game;
-
+import java.io.*;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.image.*;
 public class Tile {
   private boolean canCollide;
   private boolean canInteract;
