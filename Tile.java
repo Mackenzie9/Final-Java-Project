@@ -46,12 +46,13 @@ public class Tile {
     } else {
       fileName = "Smile.java";
     }
+    BufferedImage img;
     try {
   	  img = ImageIO.read(new File(fileName));
     } catch (IOException e) {
     	e.printStackTrace();
     }
-    return image;
+    return img;
   }
   
   public int getSize(){
