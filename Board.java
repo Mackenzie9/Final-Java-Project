@@ -16,7 +16,7 @@ public class Board {
         }
       }
     }
-    //tiles[6][14] = new Tile(4);
+    tiles[6][14] = new Tile(4);
   }
   
   
