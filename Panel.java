@@ -1,16 +1,22 @@
+package game;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.*;
+
 
 public class Panel extends JPanel implements ActionListener {
 
-  static final int DELAY = 100;
+  static final int DELAY = 1;
 
   Timer timer;
 
   Character c;
 
-  Board mainBoard;
+  public static Board mainBoard;
 
   private int height;
 
@@ -72,34 +78,14 @@ public class Panel extends JPanel implements ActionListener {
     /*g.setColor(Color.red);  // sets color
     g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
 
-    BufferedImage tempImg;
+    BufferedImage tempImg = null;
+    
+    String fileName = "";
     
     for (int r = 0; r < height/40; r++) {
       for (int c = 0; c < width/40; c++) {
 
-        String fileName;
-        int tileType = mainBoard.getTile(r, c);
-        if (tileType == 0) {
-          fileName = "Floor.png";
-        } else if (tileType == 1) {
-          fileName = "Wall.png";
-        } else if (tileType == 2) {
-          fileName = "Water.png";
-        } else if (tileType == 3) {
-          fileName = "Door.png";
-        } else if (tileType == 4) {
-          fileName = "Switch.png";
-        } else {
-          fileName = "Smile.png";
-        }
-
-        try {
-  	      tempImg = ImageIO.read(new File(filename));
-        } catch (IOException e) {
-    	    e.printStackTrace();
-        }
-
-        g.draw(tempImg, c * 40, r * 40, this);
+        g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
       }
     }
 
@@ -107,11 +93,14 @@ public class Panel extends JPanel implements ActionListener {
     g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
     
   }
+  
+  
 
 
   public void actionPerformed(ActionEvent e) {
-    //c.move();
+ 
     repaint();
+    
   }
 
   
