@@ -75,24 +75,42 @@ public class Panel extends JPanel implements ActionListener {
   }
 
   public void draw(Graphics g) {
-    /*g.setColor(Color.red);  // sets color
-    g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
+	    /*g.setColor(Color.red);  // sets color
+	    g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
 
-    BufferedImage tempImg = null;
-    
-    String fileName = "";
-    
-    for (int r = 0; r < height/40; r++) {
-      for (int c = 0; c < width/40; c++) {
+	    BufferedImage tempImg = null;
+	    BufferedImage Level1 = null;
+	    
+	    for (int r = 0; r < height/40; r++) {
+	      for (int c = 0; c < width/40; c++) {
 
-        g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
-      }
-    }
+	        String fileName;
+	        int tileType = mainBoard.getTile(r, c).getType();
+	        if (tileType == 0) {
+	          fileName = "Floor.png";
+	        } else if (tileType == 1) {
+	          fileName = "Wall.png";
+	        } else if (tileType == 2) {
+	          fileName = "Water.png";
+	        } else if (tileType == 3) {
+	          fileName = "Door.png";
+	        } else if (tileType == 4) {
+	          fileName = "Switch.png";
+	        } else {
+	          fileName = "Smile.png";
+	        }
 
-    
-    g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
-    
+	        try {
+	  	      tempImg = ImageIO.read(new File(fileName));
+	        } catch (IOException e) {
+	    	    e.printStackTrace();
+	        }
+
+	        g.drawImage(tempImg, c * 40, r * 40, this);
+	      }
+	    }
   }
+
   
   
 
