@@ -63,6 +63,10 @@ public class Tile {
   public int getType() {
     return type;
   }
+	
+  public BufferedImage getImg() { //getImg or getImage depending on how you call the method becuase we have different ones across the group
+    return img;
+  }
 
   public void setCollision(boolean a){
     this.canCollide = a;
