@@ -84,10 +84,6 @@ public class Panel extends JPanel implements ActionListener {
   public void draw(Graphics g) {
     /*g.setColor(Color.red);  // sets color
     g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
-
-    BufferedImage tempImg = null;
-    
-    String fileName = "";
     
     for (int r = 0; r < height/40; r++) {
       for (int c = 0; c < width/40; c++) {
