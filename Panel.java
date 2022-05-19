@@ -14,6 +14,8 @@ public class Panel extends JPanel implements ActionListener {
 
   Timer timer;
 
+  private int level;
+
   Character c;
 
   public static Board mainBoard;
@@ -22,7 +24,9 @@ public class Panel extends JPanel implements ActionListener {
 
   private int width;
 
+  private Level[] levels;
 
+  public boolean[] switches;
   
   public Panel(int w, int h) {
     this.setPreferredSize(new Dimension(w, h));
@@ -30,12 +34,15 @@ public class Panel extends JPanel implements ActionListener {
     this.setBackground(Color.white);
     this.c = new Character();
 
+    this.levels = new Level[1];
+    
+    levels[0] = new Level(1);
+
     height = h;
     width = w;
     
     timer = new Timer(DELAY, this);
     timer.start();
-    mainBoard = new Board();
     
     this.addKeyListener(new KeyListener() { 
       //"listens" to key presses
@@ -75,50 +82,29 @@ public class Panel extends JPanel implements ActionListener {
   }
 
   public void draw(Graphics g) {
-	    /*g.setColor(Color.red);  // sets color
-	    g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
+    /*g.setColor(Color.red);  // sets color
+    g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
 
-	    BufferedImage tempImg = null;
-	    BufferedImage Level1 = null;
-	    
-	    for (int r = 0; r < height/40; r++) {
-	      for (int c = 0; c < width/40; c++) {
+    BufferedImage tempImg = null;
+    
+    String fileName = "";
+    
+    for (int r = 0; r < height/40; r++) {
+      for (int c = 0; c < width/40; c++) {
 
-	        String fileName;
-	        int tileType = mainBoard.getTile(r, c).getType();
-	        if (tileType == 0) {
-	          fileName = "Floor.png";
-	        } else if (tileType == 1) {
-	          fileName = "Wall.png";
-	        } else if (tileType == 2) {
-	          fileName = "Water.png";
-	        } else if (tileType == 3) {
-	          fileName = "Door.png";
-	        } else if (tileType == 4) {
-	          fileName = "Switch.png";
-	        } else {
-	          fileName = "Smile.png";
-	        }
+        g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
+      }
+    }
 
-	        try {
-	  	      tempImg = ImageIO.read(new File(fileName));
-	        } catch (IOException e) {
-	    	    e.printStackTrace();
-	        }
-
-	        g.drawImage(tempImg, c * 40, r * 40, this);
-	      }
-	    }
+    
+    g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
+    
   }
-
-  
-  
 
 
   public void actionPerformed(ActionEvent e) {
- 
+    mainBoard = levels[level].getBoard();
     repaint();
-    
   }
 
   
