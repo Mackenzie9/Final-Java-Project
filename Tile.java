@@ -39,7 +39,7 @@ public class Tile {
 	    	
 	      this.canCollide = true;
 	      this.canInteract = true;
-	      fileName = "ClosedDoor.png";
+	      fileName = "Door.png";
 	      
 	    } else if (this.type == 4) {
 	    	
