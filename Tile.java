@@ -84,6 +84,14 @@ public class Tile {
   public boolean getCollision(){
     return canCollide;
   }
+	
+  public void setImg(String fileName) {
+    try {
+    	img = ImageIO.read(new File(fileName));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+  }	
 
   public BufferedImage getImg() {
 	  return img;
