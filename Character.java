@@ -81,8 +81,8 @@ public class Character {
   public void checkSwitch() {
     if (Panel.mainBoard.getTile(yPos/40, xPos/40).getType() == 4 && !Panel.mainBoard.getTile(yPos/40, xPos/40).getOn()) {
       Panel.mainBoard.getTile(yPos/40, xPos/40).turnOn();
-      
-      
+      System.out.println(true);
+      Panel.mainBoard.getTile(yPos/40, xPos/40).setImg("SwitchOn.png");
     }
   }
   
