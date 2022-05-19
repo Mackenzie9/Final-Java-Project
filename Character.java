@@ -1,6 +1,5 @@
 package game;
 
-
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -46,18 +45,13 @@ public class Character {
   public Image getImage() {
 	  return img;
   }
-  
-  public void move() {
-    xPos += 40;
-    yPos += 40;
-  }
 
   public void moveLeft(){
     xPos -= 40;
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos += 40;
     }
-
+    checkSwitch();
   }
   
   public void moveRight() {
@@ -65,6 +59,7 @@ public class Character {
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos -= 40;
     }
+    checkSwitch();
   }
   
   public void moveDown() {
@@ -72,12 +67,22 @@ public class Character {
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	yPos -= 40;
     }
+    checkSwitch();
   }
 
   public void moveUp(){
     yPos -= 40;
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	yPos += 40;
+    }
+    checkSwitch();
+  }
+
+  public void checkSwitch() {
+    if (Panel.mainBoard.getTile(yPos/40, xPos/40).getType() == 4 && !Panel.mainBoard.getTile(yPos/40, xPos/40).getOn()) {
+      Panel.mainBoard.getTile(yPos/40, xPos/40).turnOn();
+      
+      
     }
   }
   
