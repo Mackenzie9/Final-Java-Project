@@ -68,12 +68,15 @@ public class Tile {
 	    //floor = 0, wall = 1, water = 2, door = 3, switch = 4
 	    //SIZE = 40; // Same for all tiles.
   }
+	
   public boolean getIsOn() {
     return isOn;
   }
+	
   public void turnOn() {
     this.isOn = true;
   }
+	
   public void turnOff() {
     this.isOn = false;
   }
@@ -81,6 +84,7 @@ public class Tile {
   public int getSize(){
     return SIZE; 
   }
+	
   public boolean getCollision(){
     return canCollide;
   }
@@ -120,7 +124,9 @@ public class Tile {
   public boolean getinteraction(){
     return canInteract;
   }
+	
   public void setInteraction(boolean a){
     this.canInteract = a;
   }
+	
 }
