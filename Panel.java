@@ -36,7 +36,7 @@ public class Panel extends JPanel implements ActionListener {
 
     this.levels = new Level[1];
     
-    levels[0] = new Level(1);
+    levels[0] = new Level(0);
 
     height = h;
     width = w;
