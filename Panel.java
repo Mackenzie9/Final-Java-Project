@@ -14,7 +14,7 @@ public class Panel extends JPanel implements ActionListener {
 
   Timer timer;
 
-  private int level;
+  private static int level;
 
   Character c;
 
@@ -24,7 +24,7 @@ public class Panel extends JPanel implements ActionListener {
 
   private int width;
 
-  private Level[] levels;
+  private static Level[] levels;
 
   public boolean[] switches;
   
