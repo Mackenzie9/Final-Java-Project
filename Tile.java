@@ -10,10 +10,13 @@ public class Tile {
   private boolean canInteract;
   public static final int SIZE = 40; 
   private BufferedImage img;
+  private boolean isOpen;
+	
   private int type;
-  
-  private boolean isOn;
   //floor = 0, wall = 1, water = 2, door = 3, switch = 4
+	
+  private boolean isOn;
+  
 
   public Tile(int t) {
       String fileName = "";
@@ -59,11 +62,12 @@ public class Tile {
 	      
 	    }
 	    try {
-	    	  img = ImageIO.read(new File(fileName));
-	      } catch (IOException e) {
-	      	e.printStackTrace();
-	      }
-	    this.type = t; 
+	    	img = ImageIO.read(new File(fileName));
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    }
+	    this.type = t;
+		  this.isOpen = false;
       this.isOn = false;
 	    //floor = 0, wall = 1, water = 2, door = 3, switch = 4
 	    //SIZE = 40; // Same for all tiles.
@@ -72,30 +76,41 @@ public class Tile {
   public boolean getIsOn() {
     return isOn;
   }
-	
-  public void turnOn() {
-    this.isOn = true;
-  }
-	
-  public void turnOff() {
-    this.isOn = false;
-  }
   
   public int getSize(){
     return SIZE; 
   }
-	
   public boolean getCollision(){
     return canCollide;
   }
-	
+
   public void setImg(String fileName) {
-    try {
+	try {
     	img = ImageIO.read(new File(fileName));
     } catch (IOException e) {
       	e.printStackTrace();
     }
-  }	
+  }
+
+
+  public boolean getOpen() {
+	  return isOpen;
+  }
+  
+  public void setOpen(boolean o) {
+	  isOpen = o;
+	  
+	  if (o) {
+		  this.setCollision(false);
+      this.setImg("Door.png");
+	  } else {
+		  this.setCollision(true);
+      this.setImg("OpenDoor.png");
+	  }
+  }
+  
+
+  
 
   public BufferedImage getImg() {
 	  return img;
@@ -111,6 +126,19 @@ public class Tile {
   
   public void setOn(boolean o) {
 	  this.isOn = o;
+    if (o) {
+		  try {
+	    	  img = ImageIO.read(new File("SwitchOn.png"));
+	      } catch (IOException e) {
+	      	e.printStackTrace();
+	      }
+	  } else {
+		  try {
+	    	  img = ImageIO.read(new File("Switch.png"));
+	      } catch (IOException e) {
+	      	e.printStackTrace();
+	      }
+	  }
   }
   
   public boolean getOn() {
@@ -124,9 +152,16 @@ public class Tile {
   public boolean getinteraction(){
     return canInteract;
   }
-	
+  
   public void setInteraction(boolean a){
     this.canInteract = a;
   }
-	
+  
+  public int openDoor() {
+	  this.type = 5;
+     
+	  this.canCollide = false;
+	  this.canInteract = false;
+	  return 5;
+  }
 }
