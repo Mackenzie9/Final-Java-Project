@@ -1,4 +1,3 @@
-package game;
 public class Level{
   private int name;
   private int[] switchesRow;
@@ -18,21 +17,24 @@ public class Level{
           map[r][c] = 0;
         }
       }
+      map[7][14] = 3;
+      map[7][0] = 3;
+      
+      
     }
     
     if (n == 0) {
-      map[7][14] = 3;
+      map[7][0] = 1;
       //map[7][10] = 4;
       //map[4][3] = 4;
 
-      this.switchesRow = new int[2];
-      this.switchesCol = new int[2];
-      
-    } else if (n == 1){
-      map[0][7] = 3;
-      this.switchesRow = new int[2];
-      this.switchesCol = new int[2];
-    } else {
+      this.switchesRow = new int[4];
+      this.switchesCol = new int[4];
+    } else if (n == 1) {
+    	map[4][5] = 2;
+    	this.switchesRow = new int[1];
+    	this.switchesCol = new int[1];
+    } else {	
       this.switchesRow = new int[1];
       this.switchesCol = new int[1];
     }
@@ -53,35 +55,57 @@ public class Level{
     
 	  
     this.board = new Board(map);
+    
+    if(n != 0) {
+    	board.getTile(7, 0).setOpen(true);
+    }
   }
 
-  public void checkOrder(int x, int y) {
-	    //System.out.println("First is: " + switchesRow[0] + " " + switchesCol[0]);
-	    int c = x / 40;
-	    int r = y / 40;
-	    int place = -1;
-	    for (int pos = 0; pos < switchesRow.length; pos++) {
-	      if (switchesRow[pos] == r && switchesCol[pos] == c) {
-	        place = pos;
-	      }
+  public boolean checkOrder(int x, int y) {
+	  //System.out.println("First is: " + switchesRow[0] + " " + switchesCol[0]);
+	  int c = x / 40;
+    int r = y / 40;
+	  int place = -1;
+	  for (int pos = 0; pos < switchesRow.length; pos++) {
+	    if (switchesRow[pos] == r && switchesCol[pos] == c) {
+	      place = pos;
 	    }
-	    System.out.println("Place = " + place);
-	    for (int i = 0; i <= place; i++) {
-	      if (i != place && !board.getTile(switchesRow[i],switchesCol[i]).getIsOn()) {
-	        for (int j = 0; j < place; j++) {
-	          board.getTile(switchesRow[j],switchesCol[j]).setOn(false);
-	          //System.out.println("Tile is on if true (shouldn't be on) " + board.getTile(switchesRow[j],switchesCol[j]).getIsOn());
-	        }
-	        i = place + 1;
-	      } else {
-	        board.getTile(r,c).setOn(true);
-	       // System.out.println("Should print true: " + board.getTile(r,c).getIsOn());
+    }
+	  System.out.println("Place = " + place);
+	  for (int i = 0; i <= place; i++) {
+	    if (i != place && !board.getTile(switchesRow[i],switchesCol[i]).getIsOn()) {
+	      for (int j = 0; j < place; j++) {
+	        board.getTile(switchesRow[j],switchesCol[j]).setOn(false);
+	        //System.out.println("Tile is on if true (shouldn't be on) " + board.getTile(switchesRow[j],switchesCol[j]).getIsOn());
 	      }
+        board.getTile(switchesRow[place],switchesCol[place]).setOn(false);
+	      i = place + 1;
+      } else {
+	      board.getTile(r,c).setOn(true);
+	      // System.out.println("Should print true: " + board.getTile(r,c).getIsOn());
 	    }
 	  }
-	  
-	  public Board getBoard() {
-	    return board;
+    for (int p = 0; p < switchesRow.length; p++) {
+	  	if (!board.getTile(switchesRow[p],switchesCol[p]).getIsOn()) {
+    		System.out.print("returned false");
+        return false;
+	    }
 	  }
+	  System.out.print("returned true");
+	return true;
+  }
 
-	}
+
+  public boolean checkSwitchesOn() {
+	  for (int i = 0; i < switchesRow.length; i++) {
+			if (!board.getTile(switchesRow[i], switchesCol[i]).getIsOn()) {
+				return false;
+			}
+		}
+		return true;
+  }
+	  
+  public Board getBoard() {
+	    return board;
+  }
+}
