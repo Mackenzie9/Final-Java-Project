@@ -95,7 +95,17 @@ public class Character {
       Panel.mainBoard.getTile(yPos/40, xPos/40).setImg("SwitchOn.png");
     }
   }
-  
+   public void checkDoor(){
+      if (Panel.mainBoard.getTile(yPos/40, xPos/40).getType() == 5){
+        Level one = new Level(1);
+      }
+      else if (Panel.mainBoard.getTile(yPos/40, xPos/40).getType() == 3){
+      
+        //code for key
+      
+      
+    }
+  }
   public int getXPos(){
     return xPos;
   }
