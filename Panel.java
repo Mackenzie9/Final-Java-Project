@@ -102,6 +102,13 @@ public class Panel extends JPanel implements ActionListener {
     mainBoard = levels[level].getBoard();
     repaint();
   }
+  public void setLevel(int stage){
+    levels[stage] = new Level(stage);
+  }
+  
+  public static Level getLevel() {
+    return levels[level]; 
+  }
 
   
 }
