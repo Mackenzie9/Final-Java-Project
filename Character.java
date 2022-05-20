@@ -46,36 +46,46 @@ public class Character {
 	  return img;
   }
 
-  public void moveLeft(){
+    public void moveLeft(){
     xPos -= 40;
+    checkDoor();
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos += 40;
     }
-    checkSwitch();
+    Panel.getLevel().checkOrder(xPos,yPos);
+    
   }
   
   public void moveRight() {
     xPos += 40;
+    checkDoor();
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos -= 40;
     }
-    checkSwitch();
+    Panel.getLevel().checkOrder(xPos,yPos);
+    
   }
   
   public void moveDown() {
     yPos += 40;
+    checkDoor();
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	yPos -= 40;
     }
-    checkSwitch();
+    Panel.getLevel().checkOrder(xPos,yPos);
+    
+    
   }
 
   public void moveUp(){
     yPos -= 40;
+    checkDoor();
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	yPos += 40;
     }
-    checkSwitch();
+
+    Panel.getLevel().checkOrder(xPos,yPos);
+    
   }
 
   public void checkSwitch() {
