@@ -34,9 +34,11 @@ public class Panel extends JPanel implements ActionListener {
     this.setBackground(Color.white);
     this.c = new Character();
 
-    this.levels = new Level[1];
+    this.level = 0;
+    this.levels = new Level[2];
     
     levels[0] = new Level(0);
+    levels[1] = new Level(1);
 
     height = h;
     width = w;
@@ -98,17 +100,21 @@ public class Panel extends JPanel implements ActionListener {
   }
 
 
+  public static Level getLevel() {
+    return levels[level]; 
+  }
+  
+  public static void setLevelNum(int l) {
+	  level = l;
+  }
+  
+  public static int getLevelNum() {
+	  return level;
+  }
+
   public void actionPerformed(ActionEvent e) {
     mainBoard = levels[level].getBoard();
     repaint();
   }
-  public void setLevel(int stage){
-    levels[stage] = new Level(stage);
-  }
-  
-  public static Level getLevel() {
-    return levels[level]; 
-  }
-
-  
+	
 }
