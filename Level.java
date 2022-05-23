@@ -9,36 +9,53 @@ public class Level{
   
   public Level(int n) {
     int[][] map = new int[15][15];
-    for (int r = 0; r < map.length; r++) {
-      for (int c = 0; c < map[r].length; c++) {
-        if (r == 0 || c == 0 || c == 14 || r == 14) {
-          map[r][c] = 1;
-        } else {
-          map[r][c] = 0;
-        }
-      }
-      map[7][14] = 3;
-      map[7][0] = 3;
-      
-      
-    }
     
-    if (n == 0) {
-      map[7][0] = 1;
-      //map[7][10] = 4;
-      //map[4][3] = 4;
-
-      this.switchesRow = new int[4];
-      this.switchesCol = new int[4];
-    } else if (n == 1) {
-    	map[4][5] = 2;
-    	this.switchesRow = new int[1];
-    	this.switchesCol = new int[1];
-    } else {	
-      this.switchesRow = new int[1];
-      this.switchesCol = new int[1];
-    }
-    for (int i = 0; i < switchesRow.length; i++) {
+	  for (int r = 0; r < map.length; r++) { // default layout
+      for (int c = 0; c < map[r].length; c++) {
+	      if (r == 0 || c == 0 || c == 14 || r == 14) {
+	        map[r][c] = 1;
+        } else {
+	        map[r][c] = 0;
+        }
+	    }
+	  }
+    map [7][0] = 3;
+    map [7][14] = 3;
+	    
+    
+    if (n == 0) {  // create the layout for the first level
+      map[7][0] = 1; // location of the door
+      this.switchesRow = new int[4]; // stores the locations of four switches
+	    this.switchesCol = new int[4];
+      
+	  } else if (n==1) { 
+      //creates the layout of the second level
+	    for (int c = 0; c < map[0].length; c++) {    
+		    map[14][c] = 2;
+  	  }  
+      for (int r = 6; r < map.length-1; r++) {
+	    		map [r][7] = 1; 
+	    	}
+	    	this.switchesRow = new int[6];
+		    this.switchesCol = new int[6];
+	  } else if (n==2) {
+      //creates the layout of the third level
+	    for (int r = 0; r < map.length; r++) {
+	  		for (int c = 0; c < map[r].length; c++) {
+	  			if ((r==4 || r==10) && ((c >2 && c<6)||(c>8 && c<12))||(r==7 && (c>4 && c<10))){
+    				map[r][c] = 1;
+	    		}
+	    	}
+	  	}
+	    this.switchesRow = new int[4];
+		  this.switchesCol = new int[4];
+	  }else {
+      map[7][14] = 1;
+	    this.switchesRow = new int[0];
+	    this.switchesCol = new int[0];
+	  }
+  
+      for (int i = 0; i < switchesRow.length; i++) {
         int rowR = (int)(Math.random() * 13 + 1);
         int colR = (int)(Math.random() * 13 + 1);
         for (int j = 0; j < i; j++) {
@@ -87,25 +104,25 @@ public class Level{
 	  }
     for (int p = 0; p < switchesRow.length; p++) {
 	  	if (!board.getTile(switchesRow[p],switchesCol[p]).getIsOn()) {
-    		System.out.print("returned false");
+    		System.out.print("returned false ");
         return false;
 	    }
 	  }
-	  System.out.print("returned true");
+	  System.out.print("returned true ");
 	return true;
   }
 
 
   public boolean checkSwitchesOn() {
-	  for (int i = 0; i < switchesRow.length; i++) {
+		for (int i = 0; i < switchesRow.length; i++) {
 			if (!board.getTile(switchesRow[i], switchesCol[i]).getIsOn()) {
 				return false;
 			}
 		}
 		return true;
-  }
+	}
 	  
-  public Board getBoard() {
+	  public Board getBoard() {
 	    return board;
-  }
-}
+	  }
+	}
