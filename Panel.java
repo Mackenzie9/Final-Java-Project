@@ -1,5 +1,3 @@
-package game;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.*;
@@ -33,12 +31,13 @@ public class Panel extends JPanel implements ActionListener {
     this.setFocusable(true);
     this.setBackground(Color.white);
     this.c = new Character();
-
     this.level = 0;
-    this.levels = new Level[2];
+    this.levels = new Level[4];
     
     levels[0] = new Level(0);
     levels[1] = new Level(1);
+    levels[2] = new Level(2);
+    levels[3] = new Level(3);
 
     height = h;
     width = w;
@@ -98,8 +97,8 @@ public class Panel extends JPanel implements ActionListener {
     g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
     
   }
-
-
+  
+  
   public static Level getLevel() {
     return levels[level]; 
   }
@@ -116,5 +115,8 @@ public class Panel extends JPanel implements ActionListener {
     mainBoard = levels[level].getBoard();
     repaint();
   }
-	
+  public static int getLastLevel() {
+	  return levels.length - 1;
+  }
+  
 }
