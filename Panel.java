@@ -1,3 +1,4 @@
+package game;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.*;
@@ -25,20 +26,49 @@ public class Panel extends JPanel implements ActionListener {
   private static Level[] levels;
 
   public boolean[] switches;
+
+  private BufferedImage mainBot;
+
+  private boolean mainMenu;
+  
+  private boolean endScreen;
+  
+  private BufferedImage mainTop;
+  
+  private boolean running;
+
+  private boolean end;
+
+  private String characterName;
   
   public Panel(int w, int h) {
+    this.endScreen = false;
     this.setPreferredSize(new Dimension(w, h));
     this.setFocusable(true);
-    this.setBackground(Color.white);
+    this.setBackground(Color.black);
     this.c = new Character();
     this.level = 0;
     this.levels = new Level[4];
+    this.mainMenu = true;
+    this.running = false;
+    characterName = "SpriteLeft.png";
     
+    
+    try {
+    	mainBot = ImageIO.read(new File("menuBottom.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+    try {
+    	mainTop = ImageIO.read(new File("menuTop.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+
     levels[0] = new Level(0);
     levels[1] = new Level(1);
     levels[2] = new Level(2);
     levels[3] = new Level(3);
-
     height = h;
     width = w;
     
@@ -51,26 +81,46 @@ public class Panel extends JPanel implements ActionListener {
       public void keyPressed(KeyEvent e) { 
         //method for when a key is pressed
         int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_UP) {
+        if (keyCode == KeyEvent.VK_UP && !mainMenu && running) {
           c.moveUp();
-        } else if (keyCode == KeyEvent.VK_DOWN) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_DOWN) {
           c.moveDown();
-        } else if (keyCode == KeyEvent.VK_LEFT) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_LEFT) {
           c.moveLeft();
-        } else if (keyCode == KeyEvent.VK_RIGHT) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_RIGHT) {
           c.moveRight();         
+        } else if(!mainMenu && running && keyCode == KeyEvent.VK_SPACE) {
+        	c.openChest();
+        	
+        } else if ((mainMenu || !running) && keyCode == KeyEvent.VK_ENTER) {
+        	
+        	running = true;
+        	System.out.println("Start");
+        	timer.start();
+        	if(mainMenu) {
+        		c = new Character(characterName);
+        	}
+        	mainMenu = false;
+    
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_ESCAPE) {
+        	running = false;
+  
+        } else if (mainMenu && keyCode == KeyEvent.VK_1) {
+        	characterName = "SpriteLeft.png";
+        } else if (mainMenu && keyCode == KeyEvent.VK_2) {
+        	characterName = "SpriteLeftHat.png";
         }
 
         
       }
 
       public void keyTyped(KeyEvent e) {
-			
-			}
+			  //unimplemented methods
+      }
 
-		  public void keyReleased(KeyEvent e) {
-			
-		  }
+      public void keyReleased(KeyEvent e) {
+			  //unimplemented methods
+      }
 
      
     }); //do not alter this line
@@ -85,16 +135,38 @@ public class Panel extends JPanel implements ActionListener {
   public void draw(Graphics g) {
     /*g.setColor(Color.red);  // sets color
     g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
-    
-    for (int r = 0; r < height/40; r++) {
-      for (int c = 0; c < width/40; c++) {
+	
+    if (!mainMenu) {
+    	for (int r = 0; r < height/40; r++) {
+    	      for (int c = 0; c < width/40; c++) {
 
-        g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
-      }
+    	        g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
+    	      }
+    	    }
+
+    	    
+    	    g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
     }
-
-    
-    g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
+    if (!running && !mainMenu) {
+    	g.setColor(new Color(0, 0, 0, 150));
+    	g.fillRect(0, 0, 600, 600);
+    	timer.stop();
+    }
+    if(mainMenu) {
+    	g.drawImage(mainTop, 0, 0, this);
+    	g.drawImage(mainBot, 0, 385, this);
+    	g.setColor(Color.red);
+    	g.fillRect(100, 300, 100, 100);
+    	g.setColor(Color.blue);
+    	g.fillRect(400, 300, 100, 100);
+    	g.setColor(Color.white);
+    	System.out.println(characterName);
+    	if (characterName.equals("Smile.png")) {
+    		g.drawRect(85, 285, 130, 130);
+    	} else {
+    		g.drawRect(385, 285, 130, 130);
+    	}
+    }
     
   }
   
@@ -112,11 +184,23 @@ public class Panel extends JPanel implements ActionListener {
   }
 
   public void actionPerformed(ActionEvent e) {
+	  if (running) {
+		  //System.out.println("running");
+	  }
+	  if (mainMenu) {
+		  //System.out.println("mainMenu");
+	  }
     mainBoard = levels[level].getBoard();
     repaint();
   }
+  
   public static int getLastLevel() {
 	  return levels.length - 1;
   }
+  
+  public static void winner() {
+	  
+  }
+  
   
 }
