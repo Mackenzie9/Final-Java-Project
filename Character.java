@@ -19,20 +19,17 @@ public class Character {
     xPos = 280;
     yPos = 280;
 
-    
     try {
   	  img = ImageIO.read(new File("Smile.png"));
     } catch (IOException e) {
     	e.printStackTrace();
     }
-
-    
   }
 
   
   public Character(String fileName) {
-    xPos = 0;
-    yPos = 0;
+    xPos = 280;
+    yPos = 280;
 
     try {
   	  img = ImageIO.read(new File(fileName));
@@ -46,65 +43,81 @@ public class Character {
 	  return img;
   }
 
-    public void moveLeft(){
+  public void moveLeft(){
     xPos -= 40;
-    checkDoor();
+    
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos += 40;
     }
-    Panel.getLevel().checkOrder(xPos,yPos);
+    callMethods();
     
   }
   
   public void moveRight() {
     xPos += 40;
-    checkDoor();
+    
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos -= 40;
     }
-    Panel.getLevel().checkOrder(xPos,yPos);
-    
+    callMethods();
   }
   
   public void moveDown() {
     yPos += 40;
-    checkDoor();
+    
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	yPos -= 40;
     }
-    Panel.getLevel().checkOrder(xPos,yPos);
-    
-    
+    callMethods();
   }
-
+  
   public void moveUp(){
     yPos -= 40;
-    checkDoor();
+    
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	yPos += 40;
     }
-
-    Panel.getLevel().checkOrder(xPos,yPos);
-    
+    callMethods();
   }
-	
+  /**
+   * callMethods calls all the methods and checks that need to be called when the character moves.
+ * for example, checkDoor is called in this method.
+   */
+  public void callMethods() {
+	 Panel.getLevel().checkOrder(xPos,yPos);
+	 checkNextLevel();
+	 checkDoor();
+    if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 7 && yPos / 40 == 7)) {
+		 System.out.println("nice");
+     Panel.winner();
+	 }
+  }
+  
   public void checkNextLevel() {
-      if (xPos/40 == 14 && yPos/40 == 7) {
-	  Panel.setLevelNum(Panel.getLevelNum() + 1);
-      }
+	  if (xPos/40 == 14 && yPos/40 == 7) {
+		  Panel.setLevelNum(Panel.getLevelNum() + 1);
+		  xPos = 40;
+		  yPos = 280;
+				  
+	  }
+    if (xPos/40 == 0 && yPos/40 == 7) {
+		  Panel.setLevelNum(Panel.getLevelNum() - 1);
+		  xPos = 520;
+		  yPos = 280;
+				  
+	  }
   }
 
-  public void checkDoor() {
-      if (Panel.getLevel().checkSwitchesOn()) {
+  
+  public void checkDoor(){
+      if (Panel.getLevel().checkSwitchesOn() && !(Panel.getLevelNum() == Panel.getLastLevel())) {
     	  Panel.mainBoard.getTile(7, 14).setImg("OpenDoor.png");
 
         //if on right side, level up. else go down a level. 
     	  Panel.mainBoard.getTile(7, 14).setOpen(true);
       }
   }
-	
   
-	
   public int getXPos(){
     return xPos;
   }
@@ -134,6 +147,14 @@ public class Character {
     return result;
   }
 
-  
+    public void openChest() {
+	  if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 12 && yPos / 40 == 7)) {
+			 //System.out.println("It works");
+		  Panel.mainBoard.getTile(7, 13).setImg("OpenChest.png");
+		  Panel.mainBoard.getTile(7, 7).makeDoor();
+
+      }
+	  //System.out.println("used space");
+  }
   
 }
