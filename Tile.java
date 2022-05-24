@@ -5,16 +5,22 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class Tile {
   private boolean canCollide;
   private boolean canInteract;
   public static final int SIZE = 40; 
   private BufferedImage img;
   private boolean isOpen;
-	
+
   private int type;
   //floor = 0, wall = 1, water = 2, door = 3, switch = 4
-	
+  
   private boolean isOn;
   
 
@@ -54,27 +60,49 @@ public class Tile {
 	    } else if (this.type == 5) {
 	    	this.canCollide = false;
 	    	this.canInteract = false;
-	    	fileName = "OpenDoor";
-	    } else {
+	    	fileName = "OpenDoor.png";
+	    
+      } else if (this.type == 6) {
+        
+        
+      } else if (this.type == 7) {
+	    	this.canCollide = true;
+	    	this.canInteract = true;
+	    	fileName = "Chest.png";
+	    } else if (this.type == 8) {
+	    	this.canCollide = true;
+	    	this.canInteract = true;
+	    	fileName = "OpenDoor.png"; //change later
+      } else {
 	      this.canCollide = false;
 	      this.canInteract = false;
 	      fileName = "Smile.png";
 	      
 	    }
 	    try {
-	    	img = ImageIO.read(new File(fileName));
-	    } catch (IOException e) {
-	      e.printStackTrace();
-	    }
-	    this.type = t;
-		  this.isOpen = false;
+	    	  img = ImageIO.read(new File(fileName));
+	      } catch (IOException e) {
+	      	e.printStackTrace();
+	      }
+	    this.type = t; 
+      this.isOpen = false;
       this.isOn = false;
 	    //floor = 0, wall = 1, water = 2, door = 3, switch = 4
 	    //SIZE = 40; // Same for all tiles.
   }
-	
   public boolean getIsOn() {
     return isOn;
+  }
+  public void makeDoor() {
+	  this.type = 5;
+	  this.canCollide = false;
+  	  this.canInteract = false;
+  	  String fileName = "OpenDoor.png";
+  	  try {
+  	    img = ImageIO.read(new File(fileName));
+      } catch (IOException e) {
+    	 e.printStackTrace();
+      }
   }
   
   public int getSize(){
@@ -102,14 +130,14 @@ public class Tile {
 	  
 	  if (o) {
 		  this.setCollision(false);
-      this.setImg("Door.png");
+		  this.setImg("OpenDoor.png");
 	  } else {
 		  this.setCollision(true);
-      this.setImg("OpenDoor.png");
-	  }
+		  this.setImg("Door.png");
+	 }
   }
   
-
+  
   
 
   public BufferedImage getImg() {
@@ -155,13 +183,5 @@ public class Tile {
   
   public void setInteraction(boolean a){
     this.canInteract = a;
-  }
-  
-  public int openDoor() {
-	  this.type = 5;
-     
-	  this.canCollide = false;
-	  this.canInteract = false;
-	  return 5;
   }
 }
