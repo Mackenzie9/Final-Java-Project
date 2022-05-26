@@ -1,9 +1,4 @@
 package game;
-import java.awt.image.*;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import java.awt.image.*;
 import java.io.File;
@@ -62,9 +57,6 @@ public class Tile {
 	    	this.canInteract = false;
 	    	fileName = "OpenDoor.png";
 	    
-      } else if (this.type == 6) {
-        
-        
       } else if (this.type == 7) {
 	    	this.canCollide = true;
 	    	this.canInteract = true;
@@ -72,7 +64,7 @@ public class Tile {
 	    } else if (this.type == 8) {
 	    	this.canCollide = true;
 	    	this.canInteract = true;
-	    	fileName = "OpenDoor.png"; //change later
+	    	fileName = "OpenChest.png"; //change later
       } else {
 	      this.canCollide = false;
 	      this.canInteract = false;
