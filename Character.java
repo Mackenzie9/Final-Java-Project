@@ -97,8 +97,8 @@ public class Character {
   */
   public void callMethods() {
 	 Panel.getLevel().checkOrder(xPos,yPos);
-	 checkNextLevel();
 	 checkDoor();
+	 checkNextLevel();
     if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 7 && yPos / 40 == 7) && Panel.mainBoard.getTile(7, 7).getType() == 5) {
 		 System.out.println("nice");
 		 Panel.winner();
