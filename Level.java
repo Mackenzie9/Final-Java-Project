@@ -1,6 +1,4 @@
 package game;
-
-
 public class Level{
 	  private int name;
 	  private int[] switchesRow;
@@ -29,7 +27,7 @@ public class Level{
 	    if (n == 0) {  // create the layout for the first level
 	      map[7][0] = 1; // location of the door
 	      this.switchesRow = new int[2]; // stores the locations of four switches
-		  this.switchesCol = new int[2];
+		    this.switchesCol = new int[2];
 	      
 		  } else if (n==1) { 
 	      //creates the layout of the second level
@@ -58,27 +56,32 @@ public class Level{
 		    this.switchesRow = new int[0];
 		    this.switchesCol = new int[0];
 		  }
-	  
-	    for (int i = 0; i < switchesRow.length; i++) {
-	        int rowR = (int)(Math.random() * 13 + 1);
-	        int colR = (int)(Math.random() * 13 + 1);
-	        boolean worksForOtherSwitches = true;
-	        for (int j = 0; j < i; j++) {
-	          while(((rowR == switchesRow[j] && colR == switchesCol[j]) || map[rowR][colR] != 0) || !worksForOtherSwitches) {
-	            worksForOtherSwitches = true;
-	        	rowR = (int)(Math.random() * 13 + 1);
-	            colR = (int)(Math.random() * 13 + 1);
-	            for (int num = 0; num < j; num ++) {
-	            	if (rowR == switchesRow[num] && colR == switchesCol[num]) {
-	            		worksForOtherSwitches = false;
-	            	}
-	            }
-	          }
-	        }
-	        this.switchesRow[i] = rowR;
-	        map[rowR][colR] = 4;
-	        this.switchesCol[i] = colR;
-	      }
+	     for (int i = 0; i < switchesRow.length; i++) {
+		        int rowR = (int)(Math.random() * 13 + 1);
+		        int colR = (int)(Math.random() * 13 + 1);
+		        boolean worksForOtherSwitches = true;
+	          while(((rowR == switchesRow[i] && colR == switchesCol[i]) || map[rowR][colR] != 0) || !worksForOtherSwitches) {
+		            worksForOtherSwitches = true;
+		        	rowR = (int)(Math.random() * 13 + 1);
+		            colR = (int)(Math.random() * 13 + 1);
+		            
+		          }
+		        for (int j = 0; j < i; j++) {
+		          while(((rowR == switchesRow[j] && colR == switchesCol[j]) || map[rowR][colR] != 0) || !worksForOtherSwitches) {
+		            worksForOtherSwitches = true;
+		        	rowR = (int)(Math.random() * 13 + 1);
+		            colR = (int)(Math.random() * 13 + 1);
+		            for (int num = 0; num < j; num ++) {
+		            	if (rowR == switchesRow[num] && colR == switchesCol[num]) {
+		            		worksForOtherSwitches = false;
+		            	}
+		            }
+		          }
+		        }
+		        this.switchesRow[i] = rowR;
+		        map[rowR][colR] = 4;
+		        this.switchesCol[i] = colR;
+		      }
 	    this.name = n;
 	    
 		  
@@ -130,9 +133,18 @@ public class Level{
 					return false;
 				}
 			}
-			return true;
+			if(this.switchesCol.length > 0) {
+				return true;
+			}
+			return false;
 		}
-	  
+
+	  public int[] getSwitchesCol() {
+	    return switchesCol;
+	  }
+	  public int[] getSwitchesRow() {
+	    return switchesRow;
+	  }
 		  
 		  public Board getBoard() {
 		    return board;
