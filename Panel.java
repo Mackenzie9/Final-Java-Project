@@ -31,15 +31,25 @@ public class Panel extends JPanel implements ActionListener {
 
   private boolean mainMenu;
   
-  private boolean endScreen;
+  private static boolean endScreen;
   
   private BufferedImage mainTop;
   
   private boolean running;
 
-  private boolean end;
+  private String characterNameR;
+  private String characterNameL;
+  
+  private BufferedImage nohatwinscreen;
+  
+  private BufferedImage hatwinscreen;
 
-  private String characterName;
+  private BufferedImage pauseMenu;
+
+  // TODO: MAKE A GAMEMODE INT TO REPLACE ALL THE GAMEMODE BOOLEANS, BECAUSE THIS IS GETTING OUT OF HAND
+  
+  private BufferedImage prevHat;
+  private BufferedImage prevNoHat;
   
   public Panel(int w, int h) {
     this.endScreen = false;
@@ -51,7 +61,9 @@ public class Panel extends JPanel implements ActionListener {
     this.levels = new Level[4];
     this.mainMenu = true;
     this.running = false;
-    characterName = "SpriteLeft.png";
+    characterNameR = "SpriteRight.png";
+    characterNameL = "SpriteLeft.png";
+    
     
     
     try {
@@ -64,11 +76,27 @@ public class Panel extends JPanel implements ActionListener {
     } catch (IOException e) {
       	e.printStackTrace();
     }
+    try {
+    	prevHat = ImageIO.read(new File("SpriteRightHat.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+    try {
+    	prevNoHat = ImageIO.read(new File("SpriteRight.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+    try {
+    	pauseMenu = ImageIO.read(new File("PauseMenu.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
 
     levels[0] = new Level(0);
     levels[1] = new Level(1);
     levels[2] = new Level(2);
     levels[3] = new Level(3);
+    
     height = h;
     width = w;
     
@@ -81,24 +109,24 @@ public class Panel extends JPanel implements ActionListener {
       public void keyPressed(KeyEvent e) { 
         //method for when a key is pressed
         int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_UP && !mainMenu && running) {
+        if (keyCode == KeyEvent.VK_UP && !mainMenu && running && !endScreen) {
           c.moveUp();
-        } else if (!mainMenu && running && keyCode == KeyEvent.VK_DOWN) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_DOWN && !endScreen) {
           c.moveDown();
-        } else if (!mainMenu && running && keyCode == KeyEvent.VK_LEFT) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_LEFT && !endScreen) {
           c.moveLeft();
-        } else if (!mainMenu && running && keyCode == KeyEvent.VK_RIGHT) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_RIGHT && !endScreen) {
           c.moveRight();         
-        } else if(!mainMenu && running && keyCode == KeyEvent.VK_SPACE) {
+        } else if(!mainMenu && running && keyCode == KeyEvent.VK_SPACE && !endScreen) {
         	c.openChest();
         	
-        } else if ((mainMenu || !running) && keyCode == KeyEvent.VK_ENTER) {
+        } else if ((mainMenu || !running) && keyCode == KeyEvent.VK_ENTER ) {
         	
         	running = true;
         	System.out.println("Start");
         	timer.start();
         	if(mainMenu) {
-        		c = new Character(characterName);
+        		c = new Character(characterNameR, characterNameL);
         	}
         	mainMenu = false;
     
@@ -106,9 +134,11 @@ public class Panel extends JPanel implements ActionListener {
         	running = false;
   
         } else if (mainMenu && keyCode == KeyEvent.VK_1) {
-        	characterName = "SpriteLeft.png";
+        	characterNameR = "SpriteRight.png";
+        	characterNameL = "SpriteLeft.png";
         } else if (mainMenu && keyCode == KeyEvent.VK_2) {
-        	characterName = "SpriteLeftHat.png";
+        	characterNameR = "SpriteRightHat.png";
+        	characterNameL = "SpriteLeftHat.png";
         }
 
         
@@ -119,7 +149,8 @@ public class Panel extends JPanel implements ActionListener {
       }
 
       public void keyReleased(KeyEvent e) {
-			  //unimplemented methods
+			  
+        //unimplemented methods
       }
 
      
@@ -136,7 +167,7 @@ public class Panel extends JPanel implements ActionListener {
     /*g.setColor(Color.red);  // sets color
     g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
 	
-    if (!mainMenu) {
+    if (!mainMenu && !endScreen) {
     	for (int r = 0; r < height/40; r++) {
     	      for (int c = 0; c < width/40; c++) {
 
@@ -147,25 +178,35 @@ public class Panel extends JPanel implements ActionListener {
     	    
     	    g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
     }
-    if (!running && !mainMenu) {
+    if (!running && !mainMenu && !endScreen) {
     	g.setColor(new Color(0, 0, 0, 150));
     	g.fillRect(0, 0, 600, 600);
+      g.drawImage(pauseMenu, 0, 0, this);
     	timer.stop();
     }
     if(mainMenu) {
     	g.drawImage(mainTop, 0, 0, this);
     	g.drawImage(mainBot, 0, 385, this);
-    	g.setColor(Color.red);
-    	g.fillRect(100, 300, 100, 100);
-    	g.setColor(Color.blue);
-    	g.fillRect(400, 300, 100, 100);
+    	g.drawImage(prevNoHat, 100, 300, 100, 100, this);
+    	g.drawImage(prevHat, 400, 300, 100, 100, this);
     	g.setColor(Color.white);
-    	System.out.println(characterName);
-    	if (characterName.equals("Smile.png")) {
+    	if (characterNameR.equals("SpriteRight.png")) {
     		g.drawRect(85, 285, 130, 130);
     	} else {
     		g.drawRect(385, 285, 130, 130);
     	}
+    }
+    if(endScreen) {
+    	
+    	
+    	if(characterNameL != "SpriteLeft.png" && characterNameR != "SpriteRight.png") {
+    		g.drawImage(hatwinscreen, 0, 0, this);
+    	}
+    	else {
+    		g.drawImage(nohatwinscreen, 0, 0, this);
+    	}
+    	
+    	timer.stop();
     }
     
   }
@@ -184,12 +225,6 @@ public class Panel extends JPanel implements ActionListener {
   }
 
   public void actionPerformed(ActionEvent e) {
-	  if (running) {
-		  //System.out.println("running");
-	  }
-	  if (mainMenu) {
-		  //System.out.println("mainMenu");
-	  }
     mainBoard = levels[level].getBoard();
     repaint();
   }
@@ -199,7 +234,19 @@ public class Panel extends JPanel implements ActionListener {
   }
   
   public static void winner() {
+	  endScreen = true;
+  }
+
+  public void resetLevel() {
+	  for (int i = 0; i < levels[level].getSwitchesCol().length; i++) {
+		  levels[level].getBoard().getTile(levels[level].getSwitchesRow()[i], levels[level].getSwitchesCol()[i]).setOn(false);;
+	  }
+	 
+		levels[level].getBoard().getTile(7, 14).setOpen(false);
 	  
+	  
+	  c.setXPos(40);
+	  c.setYPos(280);
   }
   
   
