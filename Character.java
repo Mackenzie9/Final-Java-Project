@@ -1,10 +1,17 @@
 package game;
+import java.io.*;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.image.*;
+import java.util.Arrays;
 
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
+import java.util.Arrays;
 
 
 public class Character {
@@ -13,31 +20,32 @@ public class Character {
   int yPos;
   
   BufferedImage img;
+  BufferedImage left;
+  BufferedImage right;
 
   
   public Character() {
     xPos = 280;
     yPos = 280;
 
-    try {
-  	  img = ImageIO.read(new File("Smile.png"));
-    } catch (IOException e) {
-    	e.printStackTrace();
-    }
   }
 
   
-  public Character(String fileName) {
+
+  
+  public Character(String fileNameR, String fileNameL) {
     xPos = 280;
     yPos = 280;
 
     try {
-  	  img = ImageIO.read(new File(fileName));
+  	  left = ImageIO.read(new File(fileNameL));
+  	  right = ImageIO.read(new File(fileNameR));
     } catch (IOException e) {
     	e.printStackTrace();
     }
+    
+    img = right;
   }
-
   
   public Image getImage() {
 	  return img;
@@ -50,7 +58,7 @@ public class Character {
     	xPos += 40;
     }
     callMethods();
-    
+    img = left;
   }
   
   public void moveRight() {
@@ -59,7 +67,10 @@ public class Character {
     if(Panel.mainBoard.getTile(yPos/40, xPos/40).getCollision()) {
     	xPos -= 40;
     }
+
+    System.out.println(getBoardPos());
     callMethods();
+    img = right;
   }
   
   public void moveDown() {
@@ -79,18 +90,19 @@ public class Character {
     }
     callMethods();
   }
+
   /**
-   * callMethods calls all the methods and checks that need to be called when the character moves.
- * for example, checkDoor is called in this method.
-   */
+  * callMethods calls all the methods and checks that need to be called when the character moves.
+* for example, checkDoor is called in this method.
+  */
   public void callMethods() {
 	 Panel.getLevel().checkOrder(xPos,yPos);
 	 checkNextLevel();
 	 checkDoor();
-    if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 7 && yPos / 40 == 7)) {
+    if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 7 && yPos / 40 == 7) && Panel.mainBoard.getTile(7, 7).getType() == 5) {
 		 System.out.println("nice");
-     Panel.winner();
-	 }
+		 Panel.winner();
+	  }
   }
   
   public void checkNextLevel() {
@@ -108,9 +120,10 @@ public class Character {
 	  }
   }
 
-  
+  /** checks the status of the doors. If a door SHOULD be open, but is closed, it opens that door.
+  */
   public void checkDoor(){
-      if (Panel.getLevel().checkSwitchesOn() && !(Panel.getLevelNum() == Panel.getLastLevel())) {
+      if (Panel.getLevel().checkSwitchesOn()) {
     	  Panel.mainBoard.getTile(7, 14).setImg("OpenDoor.png");
 
         //if on right side, level up. else go down a level. 
@@ -151,7 +164,7 @@ public class Character {
 	  if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 12 && yPos / 40 == 7)) {
 			 //System.out.println("It works");
 		  Panel.mainBoard.getTile(7, 13).setImg("OpenChest.png");
-		  Panel.mainBoard.getTile(7, 7).makeDoor();
+      Panel.mainBoard.getTile(7, 7).makeDoor();
 
       }
 	  //System.out.println("used space");
