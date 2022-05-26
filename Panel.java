@@ -91,6 +91,16 @@ public class Panel extends JPanel implements ActionListener {
     } catch (IOException e) {
       	e.printStackTrace();
     }
+    try {
+    	nohatwinscreen = ImageIO.read(new File("nohatwinscreen.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+    try {
+    	hatwinscreen = ImageIO.read(new File("hatwinscreen.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
 
     levels[0] = new Level(0);
     levels[1] = new Level(1);
