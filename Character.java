@@ -6,13 +6,6 @@ import javax.swing.*;
 import java.awt.image.*;
 import java.util.Arrays;
 
-import java.io.*;
-import javax.imageio.ImageIO;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.image.*;
-import java.util.Arrays;
-
 
 public class Character {
 
@@ -27,7 +20,6 @@ public class Character {
   public Character() {
     xPos = 280;
     yPos = 280;
-
   }
 
   
@@ -46,6 +38,21 @@ public class Character {
     
     img = right;
   }
+
+
+  public Character(String fileName, int x, int y) {
+		xPos = x;
+		yPos = y;
+
+		try {
+			left = ImageIO.read(new File(fileName));
+			right = ImageIO.read(new File(fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		img = right;
+	}
   
   public Image getImage() {
 	  return img;
@@ -68,7 +75,7 @@ public class Character {
     	xPos -= 40;
     }
 
-    System.out.println(getBoardPos());
+    //System.out.println(getBoardPos());
     callMethods();
     img = right;
   }
@@ -97,10 +104,10 @@ public class Character {
   */
   public void callMethods() {
 	 Panel.getLevel().checkOrder(xPos,yPos);
-	 checkDoor();
-	 checkNextLevel();
+    checkDoor();
+	  checkNextLevel();
     if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 7 && yPos / 40 == 7) && Panel.mainBoard.getTile(7, 7).getType() == 5) {
-		 System.out.println("nice");
+		 //System.out.println("nice");
 		 Panel.winner();
 	  }
   }
@@ -148,20 +155,30 @@ public class Character {
   }
 
   /** returns an array with values for accesing a 2d array:
-    index 0: the row #
-    index 1: the col #
+    index 0: the col #
+    index 1: the row #
   */
   public int[] getBoardPos() {
     int[] result = new int[2];
     
-    result[0] = this.yPos /40;
-    result[1] = this.xPos /40;
+    result[0] = this.xPos /40;
+    result[1] = this.yPos /40;
     
     return result;
   }
 
-    public void openChest() {
-	  if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 12 && yPos / 40 == 7)) {
+    
+
+  public static boolean isOutOfBounds(int[] pos) {
+		for (int i = 0; i < 2; i++) {
+			if (pos[i] < 0 || 14 < pos[i]) {
+				return true;
+			}
+		}
+		return false;
+  }
+  public void openChest() {
+	  if (Panel.getLevelNum() == Panel.getLastLevel() && ((xPos / 40 == 12 && yPos / 40 == 7) || (xPos / 40 == 13 && yPos / 40 == 6)|| (xPos / 40 == 13 && yPos / 40 == 8))) {
 			 //System.out.println("It works");
 		  Panel.mainBoard.getTile(7, 13).setImg("OpenChest.png");
       Panel.mainBoard.getTile(7, 7).makeDoor();
@@ -169,5 +186,6 @@ public class Character {
       }
 	  //System.out.println("used space");
   }
+  
   
 }
