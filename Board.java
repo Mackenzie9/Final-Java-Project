@@ -14,7 +14,7 @@ public class Board {
 	        }
 	      }
 	    }
-	    tiles[6][14] = new Tile(3);
+	    tiles[7][14] = new Tile(3);
 	  }
 
 	  public Board(int[][] arr) {    // for custom board
