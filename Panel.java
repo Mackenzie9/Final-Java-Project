@@ -32,6 +32,7 @@ public class Panel extends JPanel implements ActionListener {
   private boolean mainMenu;
   
   private static boolean endScreen;
+  private static boolean read;
   
   private BufferedImage mainTop;
   
@@ -39,10 +40,11 @@ public class Panel extends JPanel implements ActionListener {
 
   private String characterNameR;
   private String characterNameL;
+
+  private BufferedImage hatEnd;
+  private BufferedImage noHatEnd;
   
-  private BufferedImage nohatwinscreen;
-  
-  private BufferedImage hatwinscreen;
+  private BufferedImage instructionscreen;
 
   private BufferedImage pauseMenu;
 
@@ -53,6 +55,7 @@ public class Panel extends JPanel implements ActionListener {
   
   public Panel(int w, int h) {
     this.endScreen = false;
+    this.read = false;
     this.setPreferredSize(new Dimension(w, h));
     this.setFocusable(true);
     this.setBackground(Color.black);
@@ -63,14 +66,21 @@ public class Panel extends JPanel implements ActionListener {
     this.running = false;
     characterNameR = "SpriteRight.png";
     characterNameL = "SpriteLeft.png";
+    this.mainBoard = new Board();
     
-    
-    
+ 
     try {
     	mainBot = ImageIO.read(new File("menuBottom.png"));
     } catch (IOException e) {
       	e.printStackTrace();
     }
+      try {
+    	instructionscreen = ImageIO.read(new File("instructionscreen.png"));
+    } catch (IOException e) {
+      	e.printStackTrace();
+    }
+    
+    
     try {
     	mainTop = ImageIO.read(new File("menuTop.png"));
     } catch (IOException e) {
@@ -90,14 +100,14 @@ public class Panel extends JPanel implements ActionListener {
     	pauseMenu = ImageIO.read(new File("PauseMenu.png"));
     } catch (IOException e) {
       	e.printStackTrace();
-    }
+    } 
     try {
-    	nohatwinscreen = ImageIO.read(new File("nohatwinscreen.png"));
+    	noHatEnd = ImageIO.read(new File("nohatwinscreen.png"));
     } catch (IOException e) {
       	e.printStackTrace();
     }
     try {
-    	hatwinscreen = ImageIO.read(new File("hatwinscreen.png"));
+    	hatEnd = ImageIO.read(new File("hatwinscreen.png"));
     } catch (IOException e) {
       	e.printStackTrace();
     }
@@ -130,17 +140,35 @@ public class Panel extends JPanel implements ActionListener {
         } else if(!mainMenu && running && keyCode == KeyEvent.VK_SPACE && !endScreen) {
         	c.openChest();
         	
-        } else if ((mainMenu || !running) && keyCode == KeyEvent.VK_ENTER ) {
+        } else if ((mainMenu || !running || read) && keyCode == KeyEvent.VK_ENTER) {
         	
         	running = true;
         	System.out.println("Start");
         	timer.start();
+        	if (read) {
+        		read = false;
+        		
+        		
+        	}
+        	
         	if(mainMenu) {
         		c = new Character(characterNameR, characterNameL);
+        		read = true;
+        		
         	}
+        	
         	mainMenu = false;
-    
-        } else if (!mainMenu && running && keyCode == KeyEvent.VK_ESCAPE) {
+        	
+        } else if (endScreen && keyCode == KeyEvent.VK_ENTER) {
+        	for (int i = levels.length - 1; i >= 0; i--) {
+        		level = i;
+        		resetLevel();
+        	}
+        	endScreen = false;
+        	mainMenu = true;
+        	running = false;
+        
+          } else if (!mainMenu && running && keyCode == KeyEvent.VK_ESCAPE) {
         	running = false;
   
         } else if (mainMenu && keyCode == KeyEvent.VK_1) {
@@ -178,21 +206,32 @@ public class Panel extends JPanel implements ActionListener {
     g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
 	
     if (!mainMenu && !endScreen) {
+      if (!read) {
     	for (int r = 0; r < height/40; r++) {
-    	      for (int c = 0; c < width/40; c++) {
+    	  for (int c = 0; c < width/40; c++) {
 
-    	        g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
-    	      }
-    	    }
+    	    g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
+    	  }
+    	}
 
     	    
-    	    g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
+      g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
+
+      for (int i = 0; i < getLevel().getSpikes().length ; i++) {
+				Spike currSpike = getLevel().getSpikes()[i];
+				g.drawImage(currSpike.getImage(), currSpike.getXPos(), currSpike.getYPos(), this);
+			}
     }
-    if (!running && !mainMenu && !endScreen) {
+      else{
+        g.drawImage(instructionscreen, 0, 0, this);
+      }
+      }
+    if (!running && !mainMenu && !endScreen && !read) {
     	g.setColor(new Color(0, 0, 0, 150));
     	g.fillRect(0, 0, 600, 600);
       g.drawImage(pauseMenu, 0, 0, this);
     	timer.stop();
+      
     }
     if(mainMenu) {
     	g.drawImage(mainTop, 0, 0, this);
@@ -207,16 +246,13 @@ public class Panel extends JPanel implements ActionListener {
     	}
     }
     if(endScreen) {
-    	
-    	
-    	if(characterNameL != "SpriteLeft.png" && characterNameR != "SpriteRight.png") {
-    		g.drawImage(hatwinscreen, 0, 0, this);
-    	}
-    	else {
-    		g.drawImage(nohatwinscreen, 0, 0, this);
+    	if (characterNameR.equals("SpriteRight.png")) {
+    		g.drawImage(noHatEnd, 0, 0, 600, 600, this);
+    	} else {
+    		g.drawImage(hatEnd, 0, 0, 600, 600, this);
     	}
     	
-    	timer.stop();
+    	
     }
     
   }
@@ -258,6 +294,8 @@ public class Panel extends JPanel implements ActionListener {
 	  c.setXPos(40);
 	  c.setYPos(280);
   }
-  
+  public static Level getLevel(int l) {
+	  return levels[l];
+  }
   
 }
