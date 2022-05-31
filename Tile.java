@@ -1,5 +1,4 @@
 package game;
-
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
