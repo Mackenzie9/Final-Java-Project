@@ -117,6 +117,7 @@ public class Panel extends JPanel implements ActionListener {
     }
 
     levels[0] = new Level(0);
+    levels[1] = new Level((int)(Math.random() * 3 + 1));
 	  do {
     	levels[2] = new Level((int)(Math.random() * 3 + 1));
     } while (levels[2].getNumber() == levels[1].getNumber());
