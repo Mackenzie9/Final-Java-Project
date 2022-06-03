@@ -2,16 +2,18 @@ package game;
 import java.util.Arrays;
 
 public class Level{
-  private int name; // name of the level
+  
   private int[] switchesRow;
   private int[] switchesCol;
   //private int[][] map;
   private Board board;
+    private int number;
 
   private Spike[] spikes;
   
   
   public Level(int n) {
+    number = n;
     int[][] map = new int[15][15];
     this.spikes = new Spike[0];
     
@@ -306,7 +308,6 @@ public class Level{
 	    this.switchesCol[i] = colR;
 	  }
     
-    this.name = n;
 	  
     this.board = new Board(map);
     
@@ -399,5 +400,9 @@ public class Level{
   public Spike[] getSpikes() {
 		return spikes;
 	}
+
+  public int getNumber() {
+	  return number;
+  }
 
 }
