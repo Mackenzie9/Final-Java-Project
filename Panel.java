@@ -1,4 +1,5 @@
 package game;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.*;
@@ -117,9 +118,13 @@ public class Panel extends JPanel implements ActionListener {
     }
 
     levels[0] = new Level(0);
-	  levels[1] = new Level((int)(Math.random() * 3 + 1));
-	  levels[2] = new Level((int)(Math.random() * 3 + 1));
-    levels[3] = new Level((int)(Math.random() * 3 + 1));
+	  do {
+    	levels[2] = new Level((int)(Math.random() * 3 + 1));
+    } while (levels[2].getNumber() == levels[1].getNumber());
+    
+    do {
+    	levels[3] = new Level((int)(Math.random() * 3 + 1));
+    } while (levels[3].getNumber() == levels[2].getNumber() || levels[3].getNumber() == levels[1].getNumber() );
 	  levels[4] = new Level(100);
     
     height = h;
