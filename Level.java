@@ -1,4 +1,5 @@
 package game;
+
 import java.util.Arrays;
 
 public class Level{
@@ -307,6 +308,7 @@ public class Level{
 	    map[rowR][colR] = 4;
 	    this.switchesCol[i] = colR;
 	  }
+    
     
 	  
     this.board = new Board(map);
