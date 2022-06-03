@@ -153,7 +153,7 @@ public class Panel extends JPanel implements ActionListener {
         } else if ((mainMenu || !running || read) && keyCode == KeyEvent.VK_ENTER) {
         	
         	running = true;
-        	System.out.println("Start");
+        	//System.out.println("Start");
         	timer.start();
           if (read) {
         		read = false;
