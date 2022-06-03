@@ -7,7 +7,7 @@ public class Spike extends Character implements ActionListener {
 
 	/*
 	 * 15 x 15 array that holds the path the spike will follow 
-      - The path CANNOT loop back on itself, or it can, but it might behave a bit weird. 
+   *  - The path CANNOT loop back on itself, or it can, but it might behave a bit weird. 
    *  - The spike can only make 90 degree turns 
    *  - The path marked is 1 tile wide
 	 * 
@@ -26,41 +26,13 @@ public class Spike extends Character implements ActionListener {
 		
 		this.direction = -1;
 		direction = findNextDirection();
-		this.stepTimer = new Timer(1000, this);
+		
+    // 1000 milliseconds from creation before it starts firing
+    // this object will react to the timer firing
+    this.stepTimer = new Timer(1000, this);
+    stepTimer.setActionCommand("step");
 		stepTimer.start();
     
-    //this.path = p;
-		/*for (int i = 0; i < 15; i++) {
-			System.out.println("In Spike in the constructor" + Arrays.toString(this.path[i]));
-		}*/
-
-		// 1000 milliseconds from creation before it starts firing
-		//
-    /*
-		int[] currPos = getBoardPos();
-		this.direction = -1;
-		int[] nextPos = {currPos[0], currPos[1]-1}; // [x,y+1]
-		if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
-					//System.out.println("go right");
-			this.direction = 0;
-		}
-		int[] nextPos2 = {currPos[0]+1, currPos[1]}; // [x+1,y]
-		if (!isOutOfBounds(nextPos2) && getPathBoolean(nextPos2)) {
-			 this.direction = 1;
-		}
-		int[] nextPos3 = {currPos[0], currPos[1]+1}; // [x,y-1]
-		if (!isOutOfBounds(nextPos3) && getPathBoolean(nextPos3)) {
-					this.direction = 2;
-		}
-			
-		int[] nextPos4 = {currPos[0]-1, currPos[1]}; // [x-1,y]
-				if (!isOutOfBounds(nextPos4) && getPathBoolean(nextPos4)) {
-					this.direction = 3;
-		}
-		System.out.println(this.direction);
-		this.stepTimer = new Timer(1000, this);
-		stepTimer.start();
-    */
 	}
 	
 	
@@ -74,67 +46,111 @@ public class Spike extends Character implements ActionListener {
 
 		this.path = p;
 
-		// 1000 milliseconds from creation before it starts firing
-		//
-		
 		this.direction = -1;
 		direction = findNextDirection();
+
+    // 1000 milliseconds from creation before it starts firing
+		// this object will react when the timer fires
 		this.stepTimer = new Timer(1000, this);
+    stepTimer.setActionCommand("step");
 		stepTimer.start();
+    
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		
-		direction = findNextDirection();
-		if (direction == 0) {
-			moveUp();
-		} else if (direction == 1) {
-			moveRight();
-		} else if (direction == 2) {
-			moveDown();
-		} else if (direction == 3) {
-			moveLeft();
-		}
+    if (e.getActionCommand().equals("step")) {
+      direction = findNextDirection();
+		  if (direction == 0) {
+			  moveUp();
+		  } else if (direction == 1) {
+			  moveRight();
+  		} else if (direction == 2) {
+	  		moveDown();
+		  } else if (direction == 3) {
+			  moveLeft();
+      }
+    }
+
+    if (e.getActionCommand().equals("death")) {
+      //unused
+			// this will be listening to a 
+    }
+    
+    
 	}
 
 	public int findNextDirection() {
 		int[] currPos = getBoardPos(); // [x,y]
-		int d = direction;
+		int d1 = direction; // checks clockwise
+    int d2 = direction; // checks anticlockwise
+    // 0 = up, 1 = right, 2 = down, 3 = left
+    
 		for (int i = 0; i < 4; i++) {
 			
-      if (d == -1) { // correcting the value so it checks all four directions
-        d++; 
+      if (d1 == -1) { // correcting the value so it checks all four directions
+        d1++; 
       }
+      if (d2 == -1) {
+        d2 = 3;
+      }
+      d1 %= 4; // to limit this value to 0 - 3 inclusive
       
-      d %= 4; // to limit this value to 0 - 3
-			
-			if (d == 0) {
+      
+			if (d1 == 0) { // checking the clockwise way
 				int[] nextPos = {currPos[0], currPos[1]-1}; // [x,y+1]
 				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
 					//System.out.println("found a way up");
-          return d;
+          return d1;
 				}
-			} else if (d == 1) {
+			} else if (d1 == 1) {
 				int[] nextPos = {currPos[0]+1, currPos[1]}; // [x+1,y]
 				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
 					//System.out.println("found a way right");
-          return d;
+          return d1;
 				}
-			} else if (d == 2) {
+			} else if (d1 == 2) {
 				int[] nextPos = {currPos[0], currPos[1]+1}; // [x,y-1]
 				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
 					//System.out.println("found a way down");
-          return d;
+          return d1;
 				}
-			} else if (d == 3) {
+			} else if (d1 == 3) {
 				int[] nextPos = {currPos[0]-1, currPos[1]}; // [x-1,y]
 				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
 					//System.out.println("found a way left");
-          return d;
+          return d1;
 				}
 			}
 
-			d++;
+
+      if (d2 == 0) { // checking the anticlockwise way
+				int[] nextPos = {currPos[0], currPos[1]-1}; // [x,y+1]
+				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
+					//System.out.println("found a way up");
+          return d2;
+				}
+			} else if (d2 == 1) {
+				int[] nextPos = {currPos[0]+1, currPos[1]}; // [x+1,y]
+				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
+					//System.out.println("found a way right");
+          return d2;
+				}
+			} else if (d2 == 2) {
+				int[] nextPos = {currPos[0], currPos[1]+1}; // [x,y-1]
+				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
+					//System.out.println("found a way down");
+          return d2;
+				}
+			} else if (d2 == 3) {
+				int[] nextPos = {currPos[0]-1, currPos[1]}; // [x-1,y]
+				if (!isOutOfBounds(nextPos) && getPathBoolean(nextPos)) {
+					//System.out.println("found a way left");
+          return d2;
+				}
+			}
+
+			d1++;
+      d2--;
 		}
 		//System.out.println("failed to find path...");
 		return -1;
@@ -142,9 +158,15 @@ public class Spike extends Character implements ActionListener {
 	
 	
 
+  /** 
+  * @param pos The position to look at. pos[0] is col value (x), pos[1] is a row value (y)
+  *
+  * @return The path status (is part of a path or not) for that particlar position
+  */
 	public boolean getPathBoolean(int[] pos) {
 		return path[pos[1]][pos[0]];
 	}
+  
 
 	
 	
@@ -162,4 +184,21 @@ public class Spike extends Character implements ActionListener {
 		this.stepTimer = stepTimer;
 	}
 
+  /** An override for a super method to prevent the spike triggering switches
+  */
+  public void callMethods() {
+		
+	  checkDoor();
+	  
+	}
+
+	
+	//unused
+  public void touched(Character c) {
+    Timer wait = new Timer(1500, this);
+    wait.setActionCommand("death");
+    wait.setRepeats(false);
+    wait.start();
+  }
+  
 }
