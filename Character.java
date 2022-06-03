@@ -1,13 +1,15 @@
 package game;
+
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.image.*;
 import java.util.Arrays;
+import java.awt.event.*; //for ActionEvent
 
-
-public class Character {
+//implements ActionListener
+public class Character  {
 
   int xPos;
   int yPos;
@@ -100,16 +102,22 @@ public class Character {
 
   /**
   * callMethods calls all the methods and checks that need to be called when the character moves.
-* for example, checkDoor is called in this method.
+  * for example, checkDoor is called in this method.
   */
   public void callMethods() {
-	 Panel.getLevel().checkOrder(xPos,yPos);
-    checkDoor();
-	  checkNextLevel();
-    if (Panel.getLevelNum() == Panel.getLastLevel() && (xPos / 40 == 7 && yPos / 40 == 7) && Panel.mainBoard.getTile(7, 7).getType() == 5) {
+	  Panel.getLevel().checkOrder(xPos,yPos);
+	 
+	 
+	 checkDoor();
+	 checkNextLevel();
+	  
+    if (Panel.getLevelNum() == Panel.getLastLevel() && 
+        (xPos / 40 == 7 && yPos / 40 == 7) && 
+        Panel.mainBoard.getTile(7, 7).getType() == 5) {
 		 //System.out.println("nice");
-		 Panel.winner();
+		  Panel.winner();
 	  }
+      Panel.getLevel().checkOrder(xPos,yPos); // so that the switch gets checked if the switch is right next to the
   }
   
   public void checkNextLevel() {
@@ -130,12 +138,12 @@ public class Character {
   /** checks the status of the doors. If a door SHOULD be open, but is closed, it opens that door.
   */
   public void checkDoor(){
-      if (Panel.getLevel().checkSwitchesOn()) {
-    	  Panel.mainBoard.getTile(7, 14).setImg("OpenDoor.png");
+    if (Panel.getLevel().checkSwitchesOn()) {
+  	  Panel.mainBoard.getTile(7, 14).setImg("OpenDoor.png");
 
-        //if on right side, level up. else go down a level. 
-    	  Panel.mainBoard.getTile(7, 14).setOpen(true);
-      }
+      //if on right side, level up. else go down a level. 
+    	Panel.mainBoard.getTile(7, 14).setOpen(true);
+    }
   }
   
   public int getXPos(){
@@ -154,7 +162,7 @@ public class Character {
 	    xPos = x;
   }
 
-  /** returns an array with values for accesing a 2d array:
+  /** returns an array with values for accessing a 2d array:
     index 0: the col #
     index 1: the row #
   */
@@ -167,7 +175,18 @@ public class Character {
     return result;
   }
 
-    
+    public void openChest() {
+	  if (Panel.getLevelNum() == Panel.getLastLevel() && 
+        ((xPos / 40 == 12 && yPos / 40 == 7) || 
+         (xPos / 40 == 13 && yPos / 40 == 6) || 
+         (xPos / 40 == 13 && yPos / 40 == 8))) {
+			 //System.out.println("It works");
+		  Panel.mainBoard.getTile(7, 13).setImg("OpenChest.png");
+      Panel.mainBoard.getTile(7, 7).makeDoor();
+
+    }
+	  //System.out.println("used space");
+  }
 
   public static boolean isOutOfBounds(int[] pos) {
 		for (int i = 0; i < 2; i++) {
@@ -176,16 +195,16 @@ public class Character {
 			}
 		}
 		return false;
-  }
-  public void openChest() {
-	  if (Panel.getLevelNum() == Panel.getLastLevel() && ((xPos / 40 == 12 && yPos / 40 == 7) || (xPos / 40 == 13 && yPos / 40 == 6)|| (xPos / 40 == 13 && yPos / 40 == 8))) {
-			 //System.out.println("It works");
-		  Panel.mainBoard.getTile(7, 13).setImg("OpenChest.png");
-      Panel.mainBoard.getTile(7, 7).makeDoor();
+	}
 
-      }
-	  //System.out.println("used space");
-  }
-  
-  
+  /*
+  public void death() {
+    //disable movement
+    Timer wait = new Timer(1500, this);
+    wait.setActionCommand("death");
+    wait.setRepeats(false);
+    wait.start();
+    //renable movement when wait fires
+    //move character to beginning of level
+  }*/
 }
