@@ -9,49 +9,52 @@ import java.awt.image.*;
 
 public class Panel extends JPanel implements ActionListener {
 
-  static final int DELAY = 1;
+  static final int DELAY = 1; // used for the timer. Updates the game every 1 millisecond
 
-  Timer timer;
+  Timer timer; // the timer that updates the game
 
-  private static int level;
+  private static int level; // current level
 
-  Character c;
+  Character c; // the character that we are controlling
 
-  public static Board mainBoard;
+  public static Board mainBoard; // the current board
 
-  private int height;
+  private int height; // height of the panel
 
-  private int width;
+  private int width; // width of the panel
 
-  private static Level[] levels;
+  private static Level[] levels; // where all of the levels are stored
 
-  public boolean[] switches;
+  public boolean[] switches; // where the switches for the current level are stored
 
-  private BufferedImage mainBot;
-
-  private boolean mainMenu;
+  private BufferedImage mainBot; // the image for the text in the top of the main menu
+  private BufferedImage mainTop; // the image for the text in the bottom of the main menu
   
-  private static boolean endScreen;
-  private static boolean read;
+  private boolean mainMenu; // whether we are in the main menu or not
   
-  private BufferedImage mainTop;
+  private static boolean endScreen; // if we are at the end screen or not
   
-  private boolean running;
-
-  private String characterNameR;
-  private String characterNameL;
-
-  private BufferedImage hatEnd;
-  private BufferedImage noHatEnd;
+  private static boolean read; // tf is this? I certainly dont know. My best guess is that its for when you finish 'read'ing the main menu and press enter
+  //TODO: try and figure out what the read boolean is specifically used for
   
-  private BufferedImage instructionscreen;
+  
+  
+  private boolean running; // if the game (you can see the board and all that) is running
 
-  private BufferedImage pauseMenu;
+  private String characterNameR; // stores the name of the right sprite of the character
+  private String characterNameL; // stores the name of the left sprite of the character
+
+  private BufferedImage hatEnd; // the end screen image for if you have a hat
+  private BufferedImage noHatEnd; // the end sceen for if you don't have a hat 
+  
+  private BufferedImage instructionscreen; // the image for the instructions screen
+
+  private BufferedImage pauseMenu; // the image for the pause menu
 
   // TODO: MAKE A GAMEMODE INT TO REPLACE ALL THE GAMEMODE BOOLEANS, BECAUSE THIS IS GETTING OUT OF HAND
   
-  private BufferedImage prevHat;
-  private BufferedImage prevNoHat;
+  private BufferedImage prevHat; // short for preview hat sprite. Used in the main menu
+  private BufferedImage prevNoHat; // short for preview no hat sprite. Used in the main menu
   
   public Panel(int w, int h) {
     this.endScreen = false;
@@ -61,7 +64,7 @@ public class Panel extends JPanel implements ActionListener {
     this.setBackground(Color.black);
     this.c = new Character();
     this.level = 0;
-    this.levels = new Level[4];
+    this.levels = new Level[5];
     this.mainMenu = true;
     this.running = false;
     characterNameR = "SpriteRight.png";
@@ -74,7 +77,8 @@ public class Panel extends JPanel implements ActionListener {
     } catch (IOException e) {
       	e.printStackTrace();
     }
-      try {
+    
+    try {
     	instructionscreen = ImageIO.read(new File("instructionscreen.png"));
     } catch (IOException e) {
       	e.printStackTrace();
@@ -113,9 +117,10 @@ public class Panel extends JPanel implements ActionListener {
     }
 
     levels[0] = new Level(0);
-    levels[1] = new Level(1);
-    levels[2] = new Level(2);
-    levels[3] = new Level(3);
+	  levels[1] = new Level((int)(Math.random() * 3 + 1));
+	  levels[2] = new Level((int)(Math.random() * 3 + 1));
+    levels[3] = new Level((int)(Math.random() * 3 + 1));
+	  levels[4] = new Level(100);
     
     height = h;
     width = w;
@@ -145,18 +150,13 @@ public class Panel extends JPanel implements ActionListener {
         	running = true;
         	System.out.println("Start");
         	timer.start();
-        	if (read) {
+          if (read) {
         		read = false;
-        		
-        		
         	}
-        	
-        	if(mainMenu) {
+        	if (mainMenu) {
         		c = new Character(characterNameR, characterNameL);
         		read = true;
-        		
         	}
-        	
         	mainMenu = false;
         	
         } else if (endScreen && keyCode == KeyEvent.VK_ENTER) {
@@ -168,7 +168,7 @@ public class Panel extends JPanel implements ActionListener {
         	mainMenu = true;
         	running = false;
         
-          } else if (!mainMenu && running && keyCode == KeyEvent.VK_ESCAPE) {
+        } else if (!mainMenu && running && keyCode == KeyEvent.VK_ESCAPE) {
         	running = false;
   
         } else if (mainMenu && keyCode == KeyEvent.VK_1) {
@@ -187,7 +187,6 @@ public class Panel extends JPanel implements ActionListener {
       }
 
       public void keyReleased(KeyEvent e) {
-			  
         //unimplemented methods
       }
 
@@ -201,31 +200,41 @@ public class Panel extends JPanel implements ActionListener {
     draw(g);
   }
 
+  /** Draws the screen based on what is supposed to be there.
+   * Used when updating the screen.
+   */
   public void draw(Graphics g) {
     /*g.setColor(Color.red);  // sets color
     g.fillRect(c.getXPos(), c.getYPos(), 25, 25); //draws a square*/
 	
     if (!mainMenu && !endScreen) {
       if (!read) {
-    	for (int r = 0; r < height/40; r++) {
-    	  for (int c = 0; c < width/40; c++) {
-
-    	    g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
+    	  for (int r = 0; r < height/40; r++) {
+    	    for (int c = 0; c < width/40; c++) {
+    	      g.drawImage(mainBoard.getTile(r, c).getImg(), c * 40, r * 40, this);
+    	    }
     	  }
-    	}
 
     	    
-      g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
+        g.drawImage(c.getImage(), c.getXPos(), c.getYPos(), this);
 
-      for (int i = 0; i < getLevel().getSpikes().length ; i++) {
-				Spike currSpike = getLevel().getSpikes()[i];
-				g.drawImage(currSpike.getImage(), currSpike.getXPos(), currSpike.getYPos(), this);
-			}
-    }
-      else{
+        for (int i = 0; i < getLevel().getSpikes().length ; i++) {
+				  Spike currSpike = getLevel().getSpikes()[i];
+				  g.drawImage(currSpike.getImage(), currSpike.getXPos(), currSpike.getYPos(), this);
+          if (c.getXPos() == currSpike.getXPos() && 
+              c.getYPos() == currSpike.getYPos()) {
+            resetLevel();
+            //currSpike.touch();
+            
+          }
+			  }
+      }
+      else {
         g.drawImage(instructionscreen, 0, 0, this);
       }
-      }
+      
+      
+    }
     if (!running && !mainMenu && !endScreen && !read) {
     	g.setColor(new Color(0, 0, 0, 150));
     	g.fillRect(0, 0, 600, 600);
@@ -233,7 +242,7 @@ public class Panel extends JPanel implements ActionListener {
     	timer.stop();
       
     }
-    if(mainMenu) {
+    if (mainMenu) {
     	g.drawImage(mainTop, 0, 0, this);
     	g.drawImage(mainBot, 0, 385, this);
     	g.drawImage(prevNoHat, 100, 300, 100, 100, this);
@@ -279,21 +288,41 @@ public class Panel extends JPanel implements ActionListener {
 	  return levels.length - 1;
   }
   
-  public static void winner() {
+  public static void winner() { // ya win :D
 	  endScreen = true;
+    //makes new levels so that if you want to reset the game it doesn't have the switches in the same places.
+    levels[0] = new Level(0);
+	  levels[1] = new Level((int)(Math.random() * 3 + 1));
+	  levels[2] = new Level((int)(Math.random() * 3 + 1));
+    levels[3] = new Level((int)(Math.random() * 3 + 1));
+	  levels[4] = new Level(100);
   }
 
   public void resetLevel() {
 	  for (int i = 0; i < levels[level].getSwitchesCol().length; i++) {
-		  levels[level].getBoard().getTile(levels[level].getSwitchesRow()[i], levels[level].getSwitchesCol()[i]).setOn(false);;
+		  levels[level].getBoard().getTile(levels[level].getSwitchesRow()[i], levels[level].getSwitchesCol()[i]).setOn(false);; // sets all switches to off
 	  }
-	 
-		levels[level].getBoard().getTile(7, 14).setOpen(false);
-	  
-	  
-	  c.setXPos(40);
+		  
+    levels[level].getBoard().getTile(7, 14).setOpen(false); // closes the door
+		if (Panel.getLastLevel() == Panel.getLevelNum()) { // the current level is the last one
+		  levels[level].getBoard().getTile(7, 7).setType(0);
+		  levels[level].getBoard().getTile(7, 7).setImg("Floor.png");
+		  levels[level].getBoard().getTile(7, 13).setType(7);
+		  levels[level].getBoard().getTile(7, 13).setImg("Chest.png");
+      levels[level].getBoard().getTile(7, 14).setType(1);
+			levels[level].getBoard().getTile(7, 14).setImg("Wall.png");
+	  }
+    //if The first switch is on the place where the character lands, then the switch gets turned on.
+	  if (levels[level].getSwitchesRow().length != 0 && 
+        levels[level].getSwitchesRow()[0] == 7 && 
+        levels[level].getSwitchesCol()[0] == 1) {
+		  levels[level].getBoard().getTile(levels[level].getSwitchesRow()[0], levels[level].getSwitchesCol()[0]).setOn(true);
+	  }
+	  c.setXPos(40); // sets player position to the start of the level
 	  c.setYPos(280);
   }
+
+  
   public static Level getLevel(int l) {
 	  return levels[l];
   }
