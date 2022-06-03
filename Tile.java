@@ -6,108 +6,103 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Tile {
-  private boolean canCollide;
-  private boolean canInteract;
-  public static final int SIZE = 40; 
-  private BufferedImage img;
-  private boolean isOpen;
+  private boolean canCollide; // if you can collide, and thus not able to move to it
+  public static final int SIZE = 40; // the tile is 40 * 40 pixels wide
+  private BufferedImage img; // the current image to be displayed of the tile
+  private boolean isOpen; // used for doors and chests
 
   private int type;
   //floor = 0, wall = 1, water = 2, door = 3, switch = 4
   
-  private boolean isOn;
+  private boolean isOn; // used for switches
   
 
   public Tile(int t) {
-      String fileName = "";
-      this.type = t;
-	    if (this.type == 0) {
-	      this.canCollide = false;
-	      this.canInteract = false; 
-	      fileName = "Floor.png";
+    String fileName = "";
+    this.type = t;
+  
+    if (this.type == 0) {
+      this.canCollide = false;
+	    fileName = "Floor.png";
 	      
-	    } else if (this.type == 1) {
-	    	
-	      this.canCollide = true;
-	      this.canInteract = false;
-	      fileName = "Wall.png";
+	  } else if (this.type == 1) {
+	    this.canCollide = true;
+      fileName = "Wall.png";
 	      
-	    } else if (this.type == 2) {
-	    	
-	      this.canCollide = true;
-	      this.canInteract = false;
-	      fileName = "Water.png";
-	      
-	    } else if (this.type == 3) {
-	    	
-	      this.canCollide = true;
-	      this.canInteract = true;
-	      fileName = "Door.png";
-	      
-	    } else if (this.type == 4) {
-	    	
-	      this.canCollide = false;
-	      this.canInteract = false;
-	      this.isOn = false;
-	      fileName = "Switch.png";
-	      
-	    } else if (this.type == 5) {
-	    	this.canCollide = false;
-	    	this.canInteract = false;
-	    	fileName = "OpenDoor.png";
-	    
-      } else if (this.type == 7) {
-	    	this.canCollide = true;
-	    	this.canInteract = true;
-	    	fileName = "Chest.png";
-	    } else if (this.type == 8) {
-	    	this.canCollide = true;
-	    	this.canInteract = true;
-	    	fileName = "OpenChest.png"; //change later
-      } else {
-	      this.canCollide = false;
-	      this.canInteract = false;
-	      fileName = "Smile.png";
-	      
-	    }
-	    try {
-	    	  img = ImageIO.read(new File(fileName));
-	      } catch (IOException e) {
-	      	e.printStackTrace();
-	      }
-	    this.type = t; 
-      this.isOpen = false;
+	  } else if (this.type == 2) {
+	    this.canCollide = true;
+      fileName = "Water.png";
+      
+	  } else if (this.type == 3) {
+	    this.canCollide = true;
+      fileName = "Door.png";
+      
+	  } else if (this.type == 4) {
+	    this.canCollide = false;
       this.isOn = false;
-	    //floor = 0, wall = 1, water = 2, door = 3, switch = 4
-	    //SIZE = 40; // Same for all tiles.
+	    fileName = "Switch.png";
+	      
+	  } else if (this.type == 5) {
+	  	this.canCollide = false;
+	    	
+    	fileName = "OpenDoor.png";
+	    
+    } else if (this.type == 7) {
+	    this.canCollide = true;
+	    	
+	  	fileName = "Chest.png";
+	  } else if (this.type == 8) {
+    	this.canCollide = true;
+	    	
+      fileName = "OpenChest.png"; 
+    } else {
+	    this.canCollide = false;
+      fileName = "Smile.png";
+	      
+	  }
+	    
+    try {
+	    img = ImageIO.read(new File(fileName));
+	  } catch (IOException e) {
+	    e.printStackTrace();
+	  }
+    
+    this.type = t; 
+    this.isOpen = false;
+    this.isOn = false;
+    //floor = 0, wall = 1, water = 2, door = 3, switch = 4
+	  //SIZE = 40; // Same for all tiles.
   }
+  
   public boolean getIsOn() {
     return isOn;
   }
+  
   public void makeDoor() {
 	  this.type = 5;
 	  this.canCollide = false;
-  	  this.canInteract = false;
-  	  String fileName = "OpenDoor.png";
-  	  try {
-  	    img = ImageIO.read(new File(fileName));
-      } catch (IOException e) {
-    	 e.printStackTrace();
-      }
+  	  
+  	String fileName = "OpenDoor.png";
+    try {
+	    img = ImageIO.read(new File(fileName));
+    } catch (IOException e) {
+  	  e.printStackTrace();
+    }
   }
   
   public int getSize(){
     return SIZE; 
   }
+  
   public boolean getCollision(){
     return canCollide;
   }
 
   public void setImg(String fileName) {
-	try {
+	  try {
     	img = ImageIO.read(new File(fileName));
     } catch (IOException e) {
-      	e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
@@ -125,7 +120,8 @@ public class Tile {
 	  } else {
 		  this.setCollision(true);
 		  this.setImg("Door.png");
-	 }
+	  }
+    
   }
   
   
@@ -168,11 +164,4 @@ public class Tile {
     this.canCollide = a;
   }
   
-  public boolean getinteraction(){
-    return canInteract;
-  }
-  
-  public void setInteraction(boolean a){
-    this.canInteract = a;
-  }
 }
