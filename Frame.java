@@ -11,7 +11,7 @@ public class Frame extends JFrame {
     this.setResizable(false); //so that it looks ok
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     // ends when you click X on the Jframe
-    this.setTitle("Game");
+    this.setTitle("Treasure & Fame");
     
   }
   
